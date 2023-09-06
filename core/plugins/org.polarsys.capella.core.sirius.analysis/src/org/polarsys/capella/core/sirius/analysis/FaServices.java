@@ -3113,7 +3113,10 @@ public class FaServices {
     if (eObject == container) {
       return true;
     } else if (eObject instanceof AbstractFunction) {
-      if (((AbstractFunction) eObject).getComponentFunctionalAllocations().stream().anyMatch(cfa -> isEObjectInHierarchyOfContainer(cfa, container))) {
+      AbstractFunction eFunction = (AbstractFunction) eObject;
+      if (eFunction.getComponentFunctionalAllocations().stream().anyMatch(cfa -> isEObjectInHierarchyOfContainer(cfa, container))) {
+        return true;
+      } else if (container instanceof Component && eFunction.getAllocationBlocks().stream().anyMatch(e -> ComponentExt.getAllSubUsedComponents((Component) container).contains(eObject))) {
         return true;
       }
     } else if (eObject instanceof ModelElement && eObject.eContainer() != null) {
